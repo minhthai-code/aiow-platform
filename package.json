@@ -1,0 +1,24 @@
+{
+  "name": "ytube-platform-v3",
+  "version": "3.0.0",
+  "description": "YouTube-scale frontend platform — billion-user ready",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "lit": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.57.0",
+    "@typescript-eslint/parser": "^8.57.0",
+    "eslint": "^10.0.3",
+    "typescript": "^5.4.0",
+    "vite": "^5.2.0"
+  }
+}
