@@ -122,9 +122,9 @@ export const LIGHT_TOKENS = `
 `;
 
 export const STATIC_TOKENS = `
-  --rail-w:    64px;
-  --sidebar-w: 224px;
-  --header-h:  56px;
+  --rail-w:    47px;
+  --sidebar-w: 164px;
+  --header-h:  41px;
   --r-xs:  4px; --r-sm: 8px; --r-md: 12px;
   --r-lg: 16px; --r-xl: 20px; --r-2xl: 24px; --r-full: 9999px;
   --ease:        cubic-bezier(0.4,0,0.2,1);

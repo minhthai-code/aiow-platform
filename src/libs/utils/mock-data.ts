@@ -1,3 +1,7 @@
+// DEV ONLY — this file must never be imported unconditionally in feature code.
+// Always import via: if (import.meta.env.DEV) { const { MOCK_VIDEOS } = await import('@libs/utils/mock-data'); }
+// or use the ?dev query alias in vite.config.ts.
+
 import type { Video, Channel, Comment } from '@core/types';
 
 export const CHANNELS: readonly Channel[] = [

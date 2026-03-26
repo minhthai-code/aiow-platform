@@ -111,7 +111,7 @@ export class NavigationController {
       to:        fullPath,
       params,
       timestamp: Date.now(),
-      traceId:   'engine',
+      traceId:   crypto.randomUUID(),
     };
 
     emit('route:will-change', ctx);
