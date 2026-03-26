@@ -33,13 +33,44 @@ export class AppShell extends LitElement {
 
   static override styles = css`
     :host {
-      display: flex; flex-direction: column;
-      height: 100vh; overflow: hidden;
-      background: var(--bg-base); color: var(--tx-1);
+      display: flex; 
+      flex-direction: column;
+      height: 100vh; 
+      overflow: hidden;
+      background: var(--bg-base); 
+      color: var(--tx-1);
+      
+      /* Perfect widths from your working code */
+      --rail-w: max(56px, min(4.5vw, 72px));
+      --sidebar-w: max(160px, min(12vw, 220px));
+      
+      /* Enhanced for ultra-wide displays */
+      @media (min-width: 2560px) {
+        --rail-w: max(64px, min(3vw, 80px));
+        --sidebar-w: max(180px, min(10vw, 240px));
+      }
+      
+      /* Optimized for mobile/tablet */
+      @media (max-width: 1024px) {
+        --rail-w: max(52px, min(5vw, 68px));
+        --sidebar-w: max(140px, min(14vw, 200px));
+      }
+      
+      /* Compact mode for small devices */
+      @media (max-width: 640px) {
+        --rail-w: max(48px, min(7vw, 60px));
+        --sidebar-w: max(120px, min(18vw, 160px));
+      }
     }
 
-    .header-row { position: relative; flex-shrink: 0; }
-    yt-header { display: block; }
+    .header-row { 
+      position: relative; 
+      flex-shrink: 0; 
+    }
+    
+    yt-header { 
+      display: block; 
+    }
 
     .sidebar-toggle {
       position: absolute;
@@ -48,7 +79,8 @@ export class AppShell extends LitElement {
       left: calc(var(--rail-w, 64px) + var(--sidebar-w, 224px));
       transform: translateX(-50%);
 
-      width: 28px; height: 28px;
+      width: 28px; 
+      height: 28px;
       border-radius: 50%;
       border: 1.5px solid var(--bd-2);
       background: var(--bg-raised);

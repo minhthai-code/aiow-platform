@@ -1,6 +1,6 @@
 import '@libs/components/layout/yt-header';
 import '@libs/components/layout/yt-rail';
-import '@libs/components/layout/yt-sidebar';
+import '@libs/components/layout/sidebars/yt-sidebar';
 import '@platform/runtime/app-shell';
 
 import { router } from '@platform/runtime/platform-router';
