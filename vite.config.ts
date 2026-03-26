@@ -36,10 +36,22 @@ export default defineConfig({
           if(id.includes('node_modules/lit')||id.includes('node_modules/@lit')) return 'vendor-lit';
           if(id.includes('src/core')||id.includes('src/platform')) return 'platform-core';
           if(id.includes('src/libs')) return 'libs';
-          if(id.includes('src/features/home'))    return 'feature-home';
-          if(id.includes('src/features/watch'))   return 'feature-watch';
-          if(id.includes('src/features/search'))  return 'feature-search';
-          if(id.includes('src/features/channel')) return 'feature-channel';
+          if(id.includes('src/features/home'))         return 'feature-home';
+          if(id.includes('src/features/watch'))        return 'feature-watch';
+          if(id.includes('src/features/search'))       return 'feature-search';
+          if(id.includes('src/features/channel'))      return 'feature-channel';
+          if(id.includes('src/features/facebook'))     return 'feature-facebook';
+          if(id.includes('src/features/discord'))      return 'feature-discord';
+          if(id.includes('src/features/spotify'))      return 'feature-spotify';
+          if(id.includes('src/features/netflix'))      return 'feature-netflix';
+          if(id.includes('src/features/professional')) return 'feature-professional';
+          if(id.includes('src/features/ai-assistant')) return 'feature-ai';
+          if(id.includes('src/features/learning'))     return 'feature-learning';
+          if(id.includes('src/features/shopping'))     return 'feature-shopping';
+          if(id.includes('src/features/marketplace'))  return 'feature-marketplace';
+          if(id.includes('src/features/maps'))         return 'feature-maps';
+          if(id.includes('src/features/transport'))    return 'feature-transport';
+          if(id.includes('src/features/auth'))         return 'feature-auth';
         },
       },
     },

@@ -1,11 +1,28 @@
 import { LitElement, html, css } from 'lit';
+import { html as staticHtml, unsafeStatic } from 'lit/static-html.js';
 import { on } from '@core/runtime-api/event-bus';
 import { getRegisteredService } from '@core/runtime-api/platform-element';
 import type { NavigationController } from '@core/router/router';
 import '@libs/components/layout/yt-header';
 import '@libs/components/layout/yt-rail';
-import '@libs/components/layout/platform-secondary-sidebars';
+import { loadSidebar } from '@libs/components/layout/sidebars/index';
 import { resolvePlatformForPath, type PlatformSidebarId } from '@platform/runtime/platform-sidebar-controller';
+
+const SIDEBAR_TAG: Record<PlatformSidebarId, string> = {
+  ytube:        'yt-secondary-sidebar',
+  facebook:     'fb-secondary-sidebar',
+  discord:      'discord-secondary-sidebar',
+  spotify:      'spotify-secondary-sidebar',
+  netflix:      'netflix-secondary-sidebar',
+  professional: 'professional-secondary-sidebar',
+  ai:           'ai-secondary-sidebar',
+  learning:     'learning-secondary-sidebar',
+  shopping:     'shopping-secondary-sidebar',
+  marketplace:  'marketplace-secondary-sidebar',
+  maps:         'maps-secondary-sidebar',
+  transport:    'transport-secondary-sidebar',
+  auth:         'auth-secondary-sidebar',
+};
 
 export class AppShell extends LitElement {
   static override properties = {
@@ -100,17 +117,32 @@ export class AppShell extends LitElement {
   private _sidebarOpen = true;
   private _allHidden   = false;
   private _platform: PlatformSidebarId = resolvePlatformForPath(location.pathname);
+  private _unsubs: Array<() => void> = [];
 
   override connectedCallback(): void {
     super.connectedCallback();
-    on('sidebar:toggled', ({ collapsed }) => {
-      this._allHidden = collapsed;
-      this.requestUpdate();
-    });
-    on('route:changed', () => {
-      this._platform = resolvePlatformForPath(location.pathname);
-      this.requestUpdate();
-    });
+    void this._loadAndUpdateSidebar(this._platform);
+    this._unsubs.push(
+      on('sidebar:toggled', ({ collapsed }) => {
+        this._allHidden = collapsed;
+        this.requestUpdate();
+      }),
+      on('route:changed', () => {
+        const next = resolvePlatformForPath(location.pathname);
+        if (next !== this._platform) {
+          this._platform = next;
+          void this._loadAndUpdateSidebar(next);
+        } else {
+          this.requestUpdate();
+        }
+      }),
+    );
+  }
+
+  override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this._unsubs.forEach(u => u());
+    this._unsubs = [];
   }
 
   getOutlet(): HTMLElement { return this.renderRoot.querySelector('#route-outlet') as HTMLElement; }
@@ -130,23 +162,20 @@ export class AppShell extends LitElement {
     getRegisteredService<NavigationController>('Router').push(p);
   }
 
+  private _sidebarLoaded = false;
+
+  private async _loadAndUpdateSidebar(platform: PlatformSidebarId): Promise<void> {
+    this._sidebarLoaded = false;
+    await loadSidebar(platform);
+    this._sidebarLoaded = true;
+    this.requestUpdate();
+  }
+
   private renderSecondarySidebar(sidebarHidden: boolean) {
     const cls = `secondary ${sidebarHidden ? 'hidden' : ''}`;
-    const n = (e: CustomEvent<string>) => this._nav(e.detail);
-    const p = this._platform;
-    if (p === 'facebook')     return html`<fb-secondary-sidebar            class=${cls} @navigate=${n}></fb-secondary-sidebar>`;
-    if (p === 'discord')      return html`<discord-secondary-sidebar        class=${cls} @navigate=${n}></discord-secondary-sidebar>`;
-    if (p === 'spotify')      return html`<spotify-secondary-sidebar        class=${cls} @navigate=${n}></spotify-secondary-sidebar>`;
-    if (p === 'netflix')      return html`<netflix-secondary-sidebar        class=${cls} @navigate=${n}></netflix-secondary-sidebar>`;
-    if (p === 'professional') return html`<professional-secondary-sidebar   class=${cls} @navigate=${n}></professional-secondary-sidebar>`;
-    if (p === 'ai')           return html`<ai-secondary-sidebar             class=${cls} @navigate=${n}></ai-secondary-sidebar>`;
-    if (p === 'learning')     return html`<learning-secondary-sidebar       class=${cls} @navigate=${n}></learning-secondary-sidebar>`;
-    if (p === 'shopping')     return html`<shopping-secondary-sidebar       class=${cls} @navigate=${n}></shopping-secondary-sidebar>`;
-    if (p === 'marketplace')  return html`<marketplace-secondary-sidebar    class=${cls} @navigate=${n}></marketplace-secondary-sidebar>`;
-    if (p === 'maps')         return html`<maps-secondary-sidebar           class=${cls} @navigate=${n}></maps-secondary-sidebar>`;
-    if (p === 'transport')    return html`<transport-secondary-sidebar      class=${cls} @navigate=${n}></transport-secondary-sidebar>`;
-    if (p === 'auth')         return html`<auth-secondary-sidebar           class=${cls} @navigate=${n}></auth-secondary-sidebar>`;
-    return html`<yt-secondary-sidebar class=${cls} @navigate=${n}></yt-secondary-sidebar>`;
+    const n   = (e: CustomEvent<string>) => this._nav(e.detail);
+    const tag = SIDEBAR_TAG[this._platform];
+    return staticHtml`<${unsafeStatic(tag)} class=${cls} @navigate=${n}></${unsafeStatic(tag)}>`;
   }
 
   override render() {
@@ -168,6 +197,8 @@ export class AppShell extends LitElement {
         <!-- Button uses CSS classes only, no inline styles -->
         <button
           class="sidebar-toggle ${buttonClass}"
+          aria-label="${this._sidebarOpen ? 'Close sidebar' : 'Open sidebar'}"
+          aria-pressed="${!this._sidebarOpen}"
           title="${this._allHidden ? 'Both sidebars closed' : (this._sidebarOpen ? 'Close sidebar' : 'Open sidebar')}"
           @click=${this._toggleSidebar.bind(this)}
         >

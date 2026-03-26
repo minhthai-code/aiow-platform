@@ -10,6 +10,7 @@ import {
 } from './engine-events';
 import { ExecutionContext } from './execution-context';
 import type { ExecutionPlan } from './execution-plan';
+import { platformLogger } from '@core/platform-logger/logger';
 import { NavigationPlanner } from './planner/navigation-planner';
 import { DataDependencyPlanner } from './planner/data-dependency-planner';
 import { RenderPhasePlanner } from './planner/render-phase-planner';
@@ -116,7 +117,14 @@ export class PlatformEngine {
           if (!this.queryExecutor) return;
           await this.queryExecutor.execute(q, signal);
         },
-      }).catch(() => {});
+      }).catch((err: unknown) => {
+        if (err instanceof DOMException && err.name === 'AbortError') return;
+        platformLogger.warn('Query failed during navigation', {
+          queryKey: q.key,
+          executionId: ctx.executionId,
+          error: String(err),
+        });
+      });
     }
 
     let unmount: Unmount | null = null;

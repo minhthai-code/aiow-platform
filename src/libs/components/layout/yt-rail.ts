@@ -138,7 +138,6 @@ export class YtRail extends LitElement {
       width: var(--rail-w, 72px);
       padding: 12px 0 0 0;
       background: var(--sidebar-bg, #0d0d0d);
-      border-right: 1px solid var(--sidebar-bd, rgba(255,255,255,0.09));
       flex-shrink: 0;
       height: 100vh;
       box-sizing: border-box;
@@ -372,7 +371,7 @@ export class YtRail extends LitElement {
       
       .help-container {
         background: var(--sidebar-bg, #f5f5f5);
-        border-top: 1px solid rgba(0, 0, 0, 0.15);
+        border-top: 0px solid rgba(0, 0, 0, 0.15);
       }
       
       .divider {

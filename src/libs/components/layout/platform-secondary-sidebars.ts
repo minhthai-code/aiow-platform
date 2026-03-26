@@ -77,21 +77,25 @@ abstract class SidebarBase extends LitElement {
       .item {
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 10px;
         width: 100%;
         padding: 9px 12px;
+        padding-right: 42px;
         margin: 3px 0;
         border-radius: 10px;
         border: none;
         background: transparent;
         color: #e5e5ea;
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 450;
         font-family: inherit;
         text-align: left;
         cursor: pointer;
         transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
         position: relative;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .item svg {
         flex-shrink: 0;
@@ -130,21 +134,45 @@ abstract class SidebarBase extends LitElement {
 
       /* Apple-style circular notification badge */
       .notification-badge {
-        margin-left: auto;
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
         background: #ff3b30;
         color: #ffffff;
-        font-size: 10px;
+        font-size: 9px;
         font-weight: 600;
         font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui;
         border-radius: 50%;
         line-height: 1;
         letter-spacing: -0.2px;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        flex-shrink: 0;
+      }
+
+      /* Standard badge styles */
+      .badge {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        background: #ff3b30;
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: 600;
+        border-radius: 50%;
+        line-height: 1;
+        letter-spacing: -0.2px;
         flex-shrink: 0;
       }
 
@@ -220,6 +248,7 @@ abstract class SidebarBase extends LitElement {
   }
 
   protected _active(path: string) {
+    if (typeof location === 'undefined') return false;
     return location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
   }
 }
@@ -254,7 +283,7 @@ class YtSecondarySidebar extends SidebarBase {
         font-size: 12px;
         font-weight: 600;
       }
-      /* Remove extra spacing on first child of section content */
+      /* Adjust spacing on first child of section content */
       .section-content .item:first-of-type {
         margin-top: 4px;
       }
@@ -480,7 +509,7 @@ class FbSecondarySidebar extends SidebarBase {
 ────────────────────────────────────────────────────────────── */
 class DiscordSecondarySidebar extends SidebarBase {
   static override styles = [
-    super.styles,
+    ...super.styles,
     css`
       :host { background: #2b2d31; border-right-color: rgba(255,255,255,0.05); }
       .item { color: #949ba4; }
@@ -579,7 +608,7 @@ class DiscordSecondarySidebar extends SidebarBase {
 ────────────────────────────────────────────────────────────── */
 class SpotifySecondarySidebar extends SidebarBase {
   static override styles = [
-    super.styles,
+    ...super.styles,
     css`
       :host { background: #121212; border-right-color: rgba(255,255,255,0.08); }
       .item { color: #a7a7a7; }
@@ -660,7 +689,7 @@ class SpotifySecondarySidebar extends SidebarBase {
 ────────────────────────────────────────────────────────────── */
 class NetflixSecondarySidebar extends SidebarBase {
   static override styles = [
-    super.styles,
+    ...super.styles,
     css`
       :host { background: #141414; border-right-color: rgba(255,255,255,0.08); }
       .item { color: #aaa; }
@@ -713,7 +742,7 @@ class NetflixSecondarySidebar extends SidebarBase {
    6. Professional (LinkedIn) sidebar
 ────────────────────────────────────────────────────────────── */
 class ProfessionalSecondarySidebar extends SidebarBase {
-  static override styles = [super.styles];
+  static override styles = super.styles as any;
 
   override render() {
     const a = this._active.bind(this);
@@ -757,7 +786,7 @@ class ProfessionalSecondarySidebar extends SidebarBase {
    7. AI sidebar
 ────────────────────────────────────────────────────────────── */
 class AISecondarySidebar extends SidebarBase {
-  static override styles = [super.styles];
+  static override styles = super.styles as any;
 
   override render() {
     const conversations = ['Debug my React app','Write unit tests','Explain transformers','SQL optimization','UI component ideas'];
@@ -813,7 +842,7 @@ class AISecondarySidebar extends SidebarBase {
    8. Learning sidebar
 ────────────────────────────────────────────────────────────── */
 class LearningSecondarySidebar extends SidebarBase {
-  static override styles = [super.styles];
+  static override styles = super.styles as any;
 
   override render() {
     return html`
@@ -854,7 +883,7 @@ class LearningSecondarySidebar extends SidebarBase {
    9. Shopping sidebar
 ────────────────────────────────────────────────────────────── */
 class ShoppingSecondarySidebar extends SidebarBase {
-  static override styles = [super.styles];
+  static override styles = super.styles as any;
 
   override render() {
     const cats = ['Electronics','Fashion','Home & Garden','Sports','Books','Toys','Health','Automotive'];
@@ -897,7 +926,7 @@ class ShoppingSecondarySidebar extends SidebarBase {
    10. Marketplace sidebar
 ────────────────────────────────────────────────────────────── */
 class MarketplaceSecondarySidebar extends SidebarBase {
-  static override styles = [super.styles];
+  static override styles = super.styles as any;
 
   override render() {
     return html`
@@ -939,7 +968,7 @@ class MarketplaceSecondarySidebar extends SidebarBase {
    11. Maps sidebar
 ────────────────────────────────────────────────────────────── */
 class MapsSecondarySidebar extends SidebarBase {
-  static override styles = [super.styles];
+  static override styles = super.styles as any;
 
   override render() {
     return html`
@@ -992,7 +1021,7 @@ class MapsSecondarySidebar extends SidebarBase {
    12. Transport sidebar
 ────────────────────────────────────────────────────────────── */
 class TransportSecondarySidebar extends SidebarBase {
-  static override styles = [super.styles];
+  static override styles = super.styles as any;
 
   override render() {
     return html`
@@ -1046,7 +1075,7 @@ class TransportSecondarySidebar extends SidebarBase {
    13. Auth sidebar
 ────────────────────────────────────────────────────────────── */
 class AuthSecondarySidebar extends SidebarBase {
-  static override styles = [super.styles];
+  static override styles = super.styles as any;
 
   override render() {
     return html`
